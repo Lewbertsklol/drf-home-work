@@ -13,4 +13,4 @@ class LessonSerializer(serializers.ModelSerializer):
         model = Lesson
         fields = '__all__'
 
-    # course = CourseSerializer()
+    course = CourseSerializer()
