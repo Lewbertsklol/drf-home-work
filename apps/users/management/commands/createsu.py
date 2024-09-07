@@ -6,5 +6,4 @@ class Command(BaseCommand):
     help = 'Create superuser'
 
     def handle(self, *args, **options):
-        User = get_user_model()
-        User.objects.create_superuser('admin', 'admin@localhost', 'admin')
+        get_user_model().objects.create_superuser('admin', 'admin@localhost', 'admin')

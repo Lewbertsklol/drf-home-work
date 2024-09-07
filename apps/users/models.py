@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 
 
 class User(AbstractUser):
@@ -18,3 +19,16 @@ class User(AbstractUser):
     class Meta:
         verbose_name = _("Пользователь")
         verbose_name_plural = _("Пользователи")
+
+
+class Payment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='payments')
+    date = models.DateTimeField(verbose_name=_('Дата платежа'))
+    course = models.ForeignKey('lms.Course', on_delete=models.CASCADE, related_name='payments', blank=True, null=True)
+    lesson = models.ForeignKey('lms.Lesson', on_delete=models.CASCADE, related_name='payments', blank=True, null=True)
+    summ = models.FloatField(verbose_name=_('Сумма платежа'))
+    payment_option = models.CharField(
+        verbose_name=_('Опция платежа'),
+        max_length=255,
+        choices=(('card', 'Карта'), ('cash', 'Наличные'))
+    )
