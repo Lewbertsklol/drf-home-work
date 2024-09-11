@@ -5,6 +5,7 @@ from django.conf import settings
 
 
 class User(AbstractUser):
+    username = models.CharField(_('Имя пользователя'), max_length=255)
     email = models.EmailField(_('email address'), unique=True)
     phone = models.CharField(_('Номер телефона'), max_length=20, blank=True, null=True)
     city = models.CharField(_('Город'), max_length=255, blank=True, null=True)
@@ -32,3 +33,10 @@ class Payment(models.Model):
         max_length=255,
         choices=(('card', 'Карта'), ('cash', 'Наличные'))
     )
+
+    class Meta:
+        verbose_name = _('Платеж')
+        verbose_name_plural = _('Платежи')
+
+    def __str__(self) -> str:
+        return f'{self.user}: {self.summ}'
