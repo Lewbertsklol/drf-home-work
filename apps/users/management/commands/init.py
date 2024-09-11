@@ -9,6 +9,8 @@ class Command(BaseCommand):
     help = 'Creates all needed fixterues'
 
     def handle(self, *args, **options):
+        call_command('migrate')
+
         if not get_user_model().objects.filter(username='superuser'):
             call_command('createsuperuser')
 
