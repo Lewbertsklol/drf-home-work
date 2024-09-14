@@ -28,7 +28,7 @@ class Lesson(models.Model):
     description = models.TextField(_('Описание'), blank=True, null=True)
     video_url = models.TextField(_('Ссылка на видео'), blank=True, null=True)
     course = models.ForeignKey('lms.Course', on_delete=models.CASCADE, related_name='lessons')
-    
+
     @property
     def user(self):
         return self.course.user
