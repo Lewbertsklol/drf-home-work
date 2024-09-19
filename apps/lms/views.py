@@ -5,17 +5,19 @@ from apps.users.permissions import IsModerator
 from .permissions import IsOwner
 from .models import Course, Lesson
 from .serializers import CourseSerializer, LessonSerializer
+from .paginators import Pagination
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    # pagination_class = Pagination
 
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
         if self.action == "create":
             permission_classes = [IsAuthenticated, ~IsModerator]
-        if self.action in ("update", "partial_update"):
+        elif self.action in ("update", "partial_update"):
             permission_classes = [IsModerator | IsOwner]
         elif self.action == "destroy":
             permission_classes = [IsOwner, ~IsModerator]
@@ -34,6 +36,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
 class LessonListAPIView(generics.ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    pagination_class = Pagination
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
