@@ -45,6 +45,7 @@ class CourseTestCase(test.APITestCase):
                 "lessons": [],
                 "name": "Test case",
                 "description": "Test description",
+                "subscription": False,
                 "preview": None,
             },
         )
@@ -64,3 +65,39 @@ class CourseTestCase(test.APITestCase):
         self.assertEqual(
             response.json(), {"non_field_errors": ["Поле содержит запрещенные ссылки"]}
         )
+
+    def test_get_request_courses(self):
+        """Тестирование запроса получения списка курсов неавторизованным
+        пользователем/авторизованным без подписки/авторизованным с подпиской"""
+        response = self.client.get("/lms/courses/")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.headers['access']}")
+
+        data = {"name": "Test case", "description": "Test description"}
+        response = self.client.post("/lms/courses/", data=data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        response = self.client.get("/lms/courses/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.json()["results"],
+            answer:=[
+                {
+                    "user": {
+                        "id": 1,
+                        "username": "testname",
+                    },
+                    "id": 1,
+                    "count_lessons": 0,
+                    "lessons": [],
+                    "name": "Test case",
+                    "description": "Test description",
+                    "subscription": False,
+                    "preview": None,
+                }
+            ],
+        )
+        self.client.post('/users/subs/create', data={"course": 1})
+        answer[0]["subscription"] = True
+        self.assertEqual(response.json()['results'], answer)

@@ -11,7 +11,7 @@ from .paginators import Pagination
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    # pagination_class = Pagination
+    pagination_class = Pagination
 
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
