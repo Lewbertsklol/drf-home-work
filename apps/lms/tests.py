@@ -36,11 +36,11 @@ class CourseTestCase(test.APITestCase):
         self.assertEqual(
             response.json(),
             {
+                "id": 1,
                 "user": {
                     "id": 1,
                     "username": "testname",
                 },
-                "id": 1,
                 "count_lessons": 0,
                 "lessons": [],
                 "name": "Test case",
@@ -82,13 +82,13 @@ class CourseTestCase(test.APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.json()["results"],
-            answer:=[
+            answer := [
                 {
+                    "id": 1,
                     "user": {
                         "id": 1,
                         "username": "testname",
                     },
-                    "id": 1,
                     "count_lessons": 0,
                     "lessons": [],
                     "name": "Test case",
@@ -98,6 +98,7 @@ class CourseTestCase(test.APITestCase):
                 }
             ],
         )
-        self.client.post('/users/subs/create', data={"course": 1})
+        self.client.post("/users/subs/create/", data={"course": 1})
+        response = self.client.get("/lms/courses/")
         answer[0]["subscription"] = True
-        self.assertEqual(response.json()['results'], answer)
+        self.assertEqual(response.json()["results"], answer)
