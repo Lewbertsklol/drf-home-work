@@ -22,40 +22,6 @@ class User(AbstractUser):
         verbose_name_plural = _("Пользователи")
 
 
-class Payment(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="payments"
-    )
-    date = models.DateTimeField(verbose_name=_("Дата платежа"))
-    course = models.ForeignKey(
-        "lms.Course",
-        on_delete=models.CASCADE,
-        related_name="payments",
-        blank=True,
-        null=True,
-    )
-    lesson = models.ForeignKey(
-        "lms.Lesson",
-        on_delete=models.CASCADE,
-        related_name="payments",
-        blank=True,
-        null=True,
-    )
-    summ = models.FloatField(verbose_name=_("Сумма платежа"))
-    payment_option = models.CharField(
-        verbose_name=_("Опция платежа"),
-        max_length=255,
-        choices=(("card", "Карта"), ("cash", "Наличные")),
-    )
-
-    class Meta:
-        verbose_name = _("Платеж")
-        verbose_name_plural = _("Платежи")
-
-    def __str__(self) -> str:
-        return f"{self.user}: {self.summ}"
-
-
 class Subscription(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="subscriptions"

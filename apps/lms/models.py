@@ -13,6 +13,7 @@ class Course(models.Model):
     name = models.CharField(_("Название"), max_length=255)
     preview = models.ImageField(_("Превью"), blank=True, null=True)
     description = models.TextField(_("Описание"), blank=True, null=True)
+    price = models.PositiveIntegerField()
 
     def __str__(self) -> str:
         return self.name
@@ -27,6 +28,7 @@ class Lesson(models.Model):
     preview = models.ImageField(_("Превью"), blank=True, null=True)
     description = models.TextField(_("Описание"), blank=True, null=True)
     video_url = models.TextField(_("Ссылка на видео"), blank=True, null=True)
+    price = models.PositiveIntegerField()
     course = models.ForeignKey(
         "lms.Course", on_delete=models.CASCADE, related_name="lessons"
     )

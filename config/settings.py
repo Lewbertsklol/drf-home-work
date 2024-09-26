@@ -10,8 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from datetime import timedelta
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +31,7 @@ SECRET_KEY = "django-insecure-14-%d!k)e5f_=4@d0fb7en(di2-w-2bk&-d0u44f9off%)9z67
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+BASE_URL = "127.0.0.1:8000"
 
 # Application definition
 
@@ -35,10 +39,7 @@ INSTALLED_APPS = [
     # Apps
     "apps.users",
     "apps.lms",
-    # 3rd party
-    "rest_framework",
-    "rest_framework_simplejwt",
-    "django_filters",
+    "apps.payments",
     # default
     "django.contrib.admin",
     "django.contrib.auth",
@@ -46,9 +47,18 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # 3rd party
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "django_filters",
+    "drf_yasg",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    # 3rd party
+    "corsheaders.middleware.CorsMiddleware",
+    # default
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -136,7 +146,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # DRF
-
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -149,3 +158,14 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
 }
+
+# Swagger
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "Basic": {"type": "basic"},
+        "DRF Token": {"type": "apiKey", "name": "Authorization", "in": "header"},
+    }
+}
+
+# Stripe
+STRIPE_TEST_API_KEY = os.environ.get("STRIPE_TEST_API_KEY")
