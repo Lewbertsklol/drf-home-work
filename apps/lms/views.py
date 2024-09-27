@@ -6,6 +6,7 @@ from .permissions import IsOwner
 from .models import Course, Lesson
 from .serializers import CourseSerializer, LessonSerializer
 from .paginators import Pagination
+from .tasks import send_email
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -24,7 +25,13 @@ class CourseViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
-        course = serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save()
+        course = self.get_object()
+        subscribers = course.subscribers.all().values_list("user", flat=True)
+        send_email.delay(course_id=course.id, users_id=list(subscribers))
 
 
 # Lessons

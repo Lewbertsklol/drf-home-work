@@ -30,7 +30,7 @@ SECRET_KEY = "django-insecure-14-%d!k)e5f_=4@d0fb7en(di2-w-2bk&-d0u44f9off%)9z67
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 BASE_URL = "127.0.0.1:8000"
 
 # Application definition
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_yasg",
     "corsheaders",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -169,3 +170,17 @@ SWAGGER_SETTINGS = {
 
 # Stripe
 STRIPE_TEST_API_KEY = os.environ.get("STRIPE_TEST_API_KEY")
+
+# Celery
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+BEAT_SYNC_EVERY = 1
+
+# Email settings
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")

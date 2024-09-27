@@ -18,6 +18,8 @@ drf-yasg = "^1.21.7"
 requests = "^2.32.3"
 django-cors-headers = "^4.4.0"
 python-dotenv = "^1.0.1"
+celery = {extras = ["redis"], version = "^5.4.0"}
+django-celery-beat = "^2.7.0"
 
 
 [build-system]
